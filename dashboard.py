@@ -5,7 +5,6 @@
 # Author: Nik Zaugg
 # Student NUmber: 12-716-734
 
-import csv
 import pandas as pd
 import numpy as np
 from bokeh.charts import Bar, Donut, output_file, show
@@ -15,16 +14,6 @@ from bokeh.models import HoverTool, Div
 from bokeh.models.sources import ColumnDataSource
 
 ###################################FUNCTIONS##########################################
-
-def loadDataSet_list():
-    '''Read data from the csv that holds the data.
-    '''
-    # Use built-in python csv reader
-    with open('bevgeburtenjahrgeschlquartstz.csv','r', encoding='utf8') as f:
-      csv_reader = csv.reader(f)
-      dataSet = list(csv_reader)
-      return dataSet;
-
 def loadPlot1(year, width, title_font_size):
     '''Plot stacked bar chart for every area in Zurich
     '''
@@ -44,6 +33,7 @@ def loadPlot1(year, width, title_font_size):
                     ('Births:', '@height')
                     ]
     )
+
     # Create a Bar glyph
     bar = Bar(dataSet, 
               values = 'Number of Births', 
@@ -192,7 +182,7 @@ def loadPlot4(height, width, title_font_size):
             outer_radius=0.5,
             start_angle=np.pi/2, 
             end_angle=(np.pi*2)*dataSet_Area['Percentage'] + np.pi/2, 
-            color=["rgba(0, 0, 255,1)", "rgba(0, 0, 255,0.8)", "rgba(0, 0, 255,0.6)", "rgba(0, 0, 255,0.4)", "rgba(0, 0, 255,0.2)"], 
+            color=["rgba(0, 0, 255,1)", "rgba(0, 0, 255,0.8)", "rgba(0, 0, 255,0.6)", "rgba(0, 0, 255,0.6)", "rgba(0, 0, 255,0.2)"], 
             )
     # Add circles to the figure to mark data points
     p.circle(
@@ -228,7 +218,7 @@ def loadPlot4(height, width, title_font_size):
 # Define the name and title of the generated .html file
 output_file('dashboard.html', title="Births in Zurich")
 
-# Load original CSV into a DataFrame for later manipulation
+# Load original CSV into a pandas DataFrame for later manipulation
 original_data_Set = pd.DataFrame(pd.read_csv("bevgeburtenjahrgeschlquartstz.csv"));
 
 # Configure the height, width and font size of the plots

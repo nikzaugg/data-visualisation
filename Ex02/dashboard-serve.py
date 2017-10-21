@@ -7,9 +7,9 @@
 # Import modules
 import numpy as np
 import scipy
-import PIL as pil 
-from bokeh.charts import output_file, show
-from bokeh.plotting import figure, ColumnDataSource
+import PIL as pil
+from PIL import Image
+from bokeh.plotting import figure, ColumnDataSource, curdoc
 from bokeh.layouts import layout, column, row, widgetbox
 from bokeh.models import Div, CustomJS, Slider
 from bokeh.models.widgets import Panel, Tabs
@@ -21,9 +21,8 @@ from bokeh.models.widgets import Panel, Tabs
 def loadImage(image):
     ''' Reads an image file and return the raw image, image as array and the view of the image
     '''
-    
     # open image, convert to rgba and get width and height
-    raw_image = pil.Image.open(image)
+    raw_image = Image.open(image)
     img_width, img_height = raw_image.size
     image_in_rgba = raw_image.convert('RGBA')
     
@@ -32,13 +31,12 @@ def loadImage(image):
     image_array = np.empty((img_height, img_width), dtype = np.uint32)
     
     image_view = image_array.view(dtype = np.uint8).reshape(img_height, img_width, 4)
-    
+
     # Copy the RGBA image into view, flipping it so it comes right-side up
     # with a lower-left origin
     image_view[:,:,:] = np.flipud(np.asarray(image_in_rgba))
     return raw_image, image_array, image_view
-
-    
+ 
 def getColorChannels(image_view):
     ''' 
     Extract color channels of an image view
@@ -168,8 +166,7 @@ def salt_pepper_noise(image, percentage):
     counter = 0
     black = [0,0,0,255]
     white = [255,255,255,255]
-    while counter <= int(768*1024*percentage):
-        
+    while counter <= int(768*1024*(percentage/100.0)):
         random_col = random.randint(0, 1023)
         random_row = random.randint(0, 767)
         random_color = random.randint(0,1)
@@ -208,7 +205,6 @@ def gaussian_filter_3_channels(red, green, blue, sigma):
     
     return combined_gaussian 
 
-    
 
 ###############################################################################
 # DEFINE PLOT FUNCTIONS
@@ -265,38 +261,26 @@ def plot_salt_pepper_plot(img_noise, image, height, width, plot_name):
         
     return fig
 
-def plot_salt_pepper_plot_slider(img_noise, noises, image, height, width, plot_name):
-    '''
-    '''
-    data_dict = {
-                "displayed": [img_noise],
-                }
+def plot_salt_pepper_plot_slider(img_noise, image_view, height, width, plot_name):
     
-    for x in range(0, 51):
-        data_dict[str(x)] = [noises[x]]
-    
-    image_width, image_height = image.size
-    
-    source = ColumnDataSource(data_dict)
-    
-    fig = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
-    fig.image_rgba(image='displayed', x=0, y=0, dw=image_width, dh=image_height, source = source)
-    
-    callback = CustomJS(args=dict(source=source), code="""
-        var data = source.data;
-        var noises = data['noises'];
-        console.log(noises);
-        var new_percentage = percentage_change.value.toString();
-        data["displayed"] = data[new_percentage]; // 40%
-        source.change.emit();
-    """)
-    
-    slide = Slider(start=0, end=50, step=1, value=10, callback=callback) 
-    callback.args["percentage_change"] = slide
-    
-    slider = widgetbox(slide)
+    image_width = 1024
+    image_height = 768
 
-    return fig, slider
+    fig = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
+    
+    image = fig.image_rgba(image=[img_noise], x=0, y=0, dw=image_width, dh=image_height)
+
+    salt_pepper_slider = Slider(title = 'Percentage of Noise', start=0, end=50, step=1, value=10)
+
+    def update_salt_pepper(attrname, old, new):
+        new_image = salt_pepper_noise(image_view, salt_pepper_slider.value)
+        image.data_source.data = {'image': [new_image]}
+    
+    salt_pepper_slider.on_change('value', update_salt_pepper)
+    
+    plot_salt_pepper_slider = widgetbox(salt_pepper_slider)
+
+    return fig, plot_salt_pepper_slider
 
 def plot_gaussian_filter(gauss_image, image, height, width, plot_name):
     
@@ -307,38 +291,25 @@ def plot_gaussian_filter(gauss_image, image, height, width, plot_name):
     
     return fig
 
-def plot_gaussian_filter_slider(gaussians, height, width, plot_name):
+def plot_gaussian_filter_slider(img_gauss, red, green, blue, height, width, plot_name):
     
-    data_dict = {
-                "displayed_sigma": [gaussians[2]],
-                "sigma0":[gaussians[0]],
-                "sigma1":[gaussians[1]],
-                "sigma2":[gaussians[2]],
-                "sigma3":[gaussians[3]],
-                "sigma4":[gaussians[4]],
-                "sigma5":[gaussians[5]]
-                }
-    
-    image_width, image_height = image.size
-    
-    source = ColumnDataSource(data_dict)
+    image_width = 1024
+    image_height = 768
     
     fig = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
-    fig.image_rgba(image='displayed_sigma', x=0, y=0, dw=image_width, dh=image_height, source=source)
+    image = fig.image_rgba(image=[img_gauss], x=0, y=0, dw=image_width, dh=image_height)
         
-    callback = CustomJS(args=dict(source=source), code="""
-        var data = source.data;
-        var new_sigma = "sigma"+sigma_change.value.toString();
-        data["displayed_sigma"] = data[new_sigma];
-        source.change.emit();
-    """)
-    
-    slide = Slider(start=0, end=5, step=1, value=2, callback=callback) 
-    callback.args["sigma_change"] = slide
-    
-    slider = widgetbox(slide)
+    gauss_slider = Slider(title = 'Sigma value', start=0, end=5, step=1, value=2)
 
-    return fig, slider
+    def update_gaussian(attrname, old, new):
+        new_image = gaussian_filter_3_channels(red, green, blue, gauss_slider.value)
+        image.data_source.data = {'image': [new_image]}
+    
+    gauss_slider.on_change('value', update_gaussian)
+    
+    plot_gaussian_slider = widgetbox(gauss_slider)
+
+    return fig, plot_gaussian_slider
 
 ###############################################################################
 # Main Program
@@ -346,17 +317,12 @@ def plot_gaussian_filter_slider(gaussians, height, width, plot_name):
 
 # Define dashboard parameters
 dashboard_width = 1300
-
 width_big = 900
 width_medium = 400
 width_small = 300
-
 height_big = 594
 height_medium = 274
 height_small = 200
-    
-# Define an output file to hold the dashboard
-output_file("image_dashboard.html", title="Image Processing")
 
 # Create HTML-tags for title and subtitle
 dashboard_title = Div(text= '<div style="text-align: center; margin-top: 10px !important; padding: 0 !important;"><h1 style="margin-bottom: 0 !important;">Dashboard</h1></div>', width= dashboard_width)
@@ -369,22 +335,10 @@ image, image_arr, image_view = loadImage('image.jpg')
 red, green, blue = getColorChannels(image_view)
 grey = get_grayscale_channel(image_view)
 reduced = reduced_color_channel(image_view, 3)
-salt_pepper = salt_pepper_noise(image_view, 0.1)
-salt_pepper_percentages = []
 
-for x in range(0, 51):
-    s_p = salt_pepper_noise(image_view, (x/100.0))
-    salt_pepper_percentages.append(s_p) 
-print(x, '% salt&pepper loading complete')
+salt_pepper = salt_pepper_noise(image_view, 10)
 
-gaussian_0 = image_view
-gaussian_1 = gaussian_filter_3_channels(red, green, blue, 1)
-gaussian_2 = gaussian_filter_3_channels(red, green, blue, 2)
-gaussian_3 = gaussian_filter_3_channels(red, green, blue, 3)
-gaussian_4 = gaussian_filter_3_channels(red, green, blue, 4)
-gaussian_5 = gaussian_filter_3_channels(red, green, blue, 5)
-
-gaussians = [gaussian_0, gaussian_1, gaussian_2, gaussian_3, gaussian_4, gaussian_5]
+gaussian = gaussian_filter_3_channels(red, green, blue, 2)
 
 # PLOT 1: Plot with original image
 plot_original = plot_original_image('image.jpg', height_big, width_big)
@@ -398,14 +352,31 @@ plot_blue = plot_color_channel(blue, image, height_small, width_small, "Blue")
 plot_tabs = plot_grayscale_and_reduced(grey, reduced, image, height_medium, width_medium, 'Greyscale & Reduced Color')
 
 # PLOT 6: Generate plot with salt & pepper noise
-plot_salt_pepper, slider_salt_pepper = plot_salt_pepper_plot_slider(salt_pepper, salt_pepper_percentages, image, height_medium, width_medium, "Random Salt & Pepper Noise")       
+plot_salt_pepper, slider_salt_pepper = plot_salt_pepper_plot_slider(salt_pepper, image_view, height_medium, width_medium, "Random Salt & Pepper Noise")       
 
 # PLOT 7: Generate plot with gaussian filter applied to it
-plot_gaussian, slider_gaussian = plot_gaussian_filter_slider(gaussians, height_medium, width_medium, "Gaussian Filter")   
+plot_gaussian, slider_gaussian = plot_gaussian_filter_slider(gaussian, red, green, blue, height_medium, width_medium, "Gaussian Filter")   
+
+# Define Layout for dashboard
+dashboard = layout(
+        row(dashboard_title),
+        row(dashboard_subtitle),
+        row([
+            column([row(plot_original), 
+                row([plot_red,plot_green,plot_blue])
+                    ]),
+            column([row(plot_tabs),
+                    row([plot_salt_pepper, slider_salt_pepper]),
+                    row([plot_gaussian, slider_gaussian])
+                    ])
+        ])) 
+
+curdoc().add_root(dashboard)
 
 
 # =============================================================================
-# TESTPLOTS 
+# =============================================================================
+# LAYOUT TESTS 
 # TODO: remove after 
 # =============================================================================
 # fig1 = figure(title="TEST", x_range=(0, 1024), y_range=(0, 768), plot_width = 900, plot_height = 594)
@@ -424,23 +395,6 @@ plot_gaussian, slider_gaussian = plot_gaussian_filter_slider(gaussians, height_m
 # slide2 = Slider(start=1, end=5, step=1, value=2)
 # slider2 = widgetbox(slide2)
 # =============================================================================
-
-
-
-dashboard = layout(row(dashboard_title),
-     row(dashboard_subtitle),
-     row([
-        column([row(plot_original), 
-               row([plot_red,plot_green,plot_blue])
-                 ]),
-         column([row(plot_tabs),
-                 row([plot_salt_pepper, slider_salt_pepper]),
-                row([plot_gaussian, slider_gaussian])
-                 ])
-     ]))
-
-        
-# =============================================================================
 # dashboard = layout(row(dashboard_title),
 #         row(dashboard_subtitle),
 #         row([
@@ -453,10 +407,10 @@ dashboard = layout(row(dashboard_title),
 #                     ])
 #         ]))
 # =============================================================================
-
 # Load the dasboard into the output_file  
-show(dashboard)
-###############################################################################
+# show(dashboard)
+# =============================================================================
+# =============================================================================
 
 
 

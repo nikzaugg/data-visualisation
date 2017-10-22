@@ -4,7 +4,7 @@
 # Exercise 2
 # University of Zurich - HS17
 
-# Import modules
+# Import needed modules
 import numpy as np
 import scipy
 import PIL as pil
@@ -42,10 +42,10 @@ def getColorChannels(image_view):
     Extract color channels of an image view
     
     Return:
-    red_channel: array containing red values
-    green_channel: array containing green values
-    blue_channel: array containing blue values
-    alpha_channel: array containing alpha values
+        red_channel: array containing red values
+        green_channel: array containing green values
+        blue_channel: array containing blue values
+        alpha_channel: array containing alpha values
     
     '''
     # RGBA - [Red, Green, Blue, Alpha]
@@ -144,9 +144,13 @@ def getColorChannels(image_view):
     return red_channel, green_channel, blue_channel
 
 def gray_scale_weighted(pixel):
+    ''' Weighs RGB pixel accordingly - for greyscale transformation
+    '''
     return 0.3*pixel[0] + 0.59*pixel[1] + 0.11*pixel[2]
 
 def get_grayscale_channel(image):
+    ''' Extract the grayscale channel from an image
+    '''
     grey = np.zeros((image.shape[0], image.shape[1],1), 'uint8')
     for rownum in range(len(image)):
         for colnum in range(len(image[rownum])):
@@ -154,6 +158,8 @@ def get_grayscale_channel(image):
     return grey
 
 def reduced_color_channel(image, size):
+    ''' Reduce the amount of different colors in the image
+    '''
     # TODO: implement function that allows for more control
     # This is not the algo we saw in the exercise
     from scipy import ndimage
@@ -161,6 +167,14 @@ def reduced_color_channel(image, size):
     return ndimage.median_filter(copy_image, size)
 
 def salt_pepper_noise(image, percentage):
+    ''' Add random salt & pepper noise (black and white pixels)
+
+        Input:
+            - image: original image
+            - percentage: integer value representing the percentage of pixels should be noisyfied
+        Return:
+            - salt_pepper: noisyfied image
+    '''
     import random
     salt_pepper = np.copy(image)
     counter = 0
@@ -181,13 +195,17 @@ def salt_pepper_noise(image, percentage):
 # https://stackoverflow.com/questions/31751210/how-can-i-prevent-numpy-scipy-gaussian-blur-from-converting-image-to-grey-scale
 # As the values in the third dimension are too close together with this filter, it will result in a gray-scale like blur
 def gaussian_filter(channel, sigma):
-    '''
+    ''' Apply Gaussian Filter on the image with defined sigma value
     '''
     x = scipy.ndimage.filters.gaussian_filter(channel[:,:,0:3], sigma)
     return x
 
 # Apply gaussian filter to all three color channel seperately to keep color in the image
 def gaussian_filter_3_channels(red, green, blue, sigma):
+    ''' Apply Gaussian Filter on the image with defined sigma value
+
+        - this filters each color channel of the image seperately
+    '''
     combined_gaussian = np.zeros((red.shape[0], red.shape[1], 4), 'uint8')
     
     copy_red = np.copy(red)
@@ -207,83 +225,175 @@ def gaussian_filter_3_channels(red, green, blue, sigma):
 
 
 ###############################################################################
-# DEFINE PLOT FUNCTIONS
+# PLOT FUNCTIONS
 ###############################################################################
-def plot_original_image(image_path, height, width):
-    ''' Plot original image
+def plot_original_image(image_path, height, width, plot_name):
+    ''' Create plot showing the image loaded from the provided image_path 
     '''
     image, image_arr, image_view = loadImage(image_path)
     image_width, image_height = image.size
     
     # Create plot for original image
-    fig = figure(title="Original Image", x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
-    fig.image_rgba(image=[image_view], x=0, y=0, dw=image_width, dh=image_height)
+    fig = figure(
+            title=plot_name, 
+            x_range=(0, image_width), 
+            y_range=(0, image_height),
+            plot_width = width, 
+            plot_height = height
+            )
+    fig.image_rgba(
+            image=[image_view], 
+            x=0, 
+            y=0, 
+            dw=image_width, 
+            dh=image_height
+            )
     
     return fig
 
 def plot_color_channel(channel, image, height, width, plot_name):
-    
+    ''' Create plot for one color channel
+    '''
     image_width, image_height = image.size
     
     # Create plot for original image
-    fig = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
-    fig.image_rgba(image=[channel], x=0, y=0, dw=image_width, dh=image_height)
+    fig = figure(
+            title=plot_name, 
+            x_range=(0, image_width), 
+            y_range=(0, image_height), 
+            plot_width = width, 
+            plot_height = height
+            )
+    fig.image_rgba(
+            image=[channel], 
+            x=0, 
+            y=0, 
+            dw=image_width, 
+            dh=image_height
+            )
 
     return fig
 
 def plot_grayscale_and_reduced(grey, reduced, image, height, width, plot_name):
-    
+    ''' Create plot with two tabs
+        - grayscale and reduced colors
+    '''
     image_width, image_height = image.size
     
-    # Tab 1
-    fig_greyscale = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
-    fig_greyscale.image(image=[grey], x=0, y=0, dw=image_width, dh=image_height)
+    # Create first figure for Tab 1
+    fig_greyscale = figure(
+            title=plot_name, 
+            x_range=(0, image_width), 
+            y_range=(0, image_height), 
+            plot_width = width, 
+            plot_height = height
+            )
+    fig_greyscale.image(
+            image=[grey], 
+            x=0, 
+            y=0, 
+            dw=image_width, 
+            dh=image_height
+            )
     tab1 = Panel(child=fig_greyscale, title="Greyscale")
     
-    # Tab 2
-    fig_reduced = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
-    fig_reduced.image_rgba(image=[reduced], x=0, y=0, dw=image_width, dh=image_height)
-    tab2 = Panel(child=fig_reduced, title="Reduced Colors")
+    # Create second figure for Tab 2
+    fig_reduced = figure(
+            title=plot_name, 
+            x_range=(0, image_width), 
+            y_range=(0, image_height), 
+            plot_width = width, 
+            plot_height = height
+            )
+    fig_reduced.image_rgba(
+            image=[reduced], 
+            x=0, 
+            y=0, 
+            dw=image_width, 
+            dh=image_height
+            )
+    tab2 = Panel(
+            child=fig_reduced, 
+            title="Reduced Colors"
+            )
     
-    # Build Tab
+    # Build Tabs
     tabs = Tabs(tabs=[ tab1, tab2 ])
     
     return tabs
 
 def plot_salt_pepper_plot(img_noise, image, height, width, plot_name):
-    '''
+    ''' Create plot with salt & pepper noise on it
     '''
   
     image_width, image_height = image.size   
     
-    fig = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
-    fig.image_rgba(image=[img_noise], x=0, y=0, dw=image_width, dh=image_height)
+    fig = figure(
+            title=plot_name, 
+            x_range=(0, image_width), 
+            y_range=(0, image_height), 
+            plot_width = width, 
+            plot_height = height
+            )
+    fig.image_rgba(
+            image=[img_noise], 
+            x=0, 
+            y=0, 
+            dw=image_width, 
+            dh=image_height
+            )
         
     return fig
 
 def plot_salt_pepper_plot_slider(img_noise, image_view, height, width, plot_name):
+    ''' Create plot with salt & pepper noise on it
+        - provides a slider with which the percentage of salt&pepper pixels can be changed
+    '''
     
     image_width = 1024
     image_height = 768
 
-    fig = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
-    
-    image = fig.image_rgba(image=[img_noise], x=0, y=0, dw=image_width, dh=image_height)
+    # Define Figure
+    fig = figure(
+            title=plot_name, 
+            x_range=(0, image_width), 
+            y_range=(0, image_height), 
+            plot_width = width, 
+            plot_height = height
+            )
+    image = fig.image_rgba(
+            image=[img_noise], 
+            x=0, 
+            y=0, 
+            dw=image_width, 
+            dh=image_height
+            )
 
-    salt_pepper_slider = Slider(title = 'Percentage of Noise', start=0, end=50, step=1, value=10)
+    # Define Slider
+    salt_pepper_slider = Slider(
+            title = 'Percentage of Noise', 
+            start=0, 
+            end=50, 
+            step=1, 
+            value=10
+            )
 
+    # Update functions that gets triggered everytime the slider is adjusted
     def update_salt_pepper(attrname, old, new):
         new_image = salt_pepper_noise(image_view, salt_pepper_slider.value)
         image.data_source.data = {'image': [new_image]}
-    
+
+    # Attach event handler to slider    
     salt_pepper_slider.on_change('value', update_salt_pepper)
-    
+
     plot_salt_pepper_slider = widgetbox(salt_pepper_slider)
 
+    # Return the Figure and the Slider
     return fig, plot_salt_pepper_slider
 
 def plot_gaussian_filter(gauss_image, image, height, width, plot_name):
-    
+    ''' Create plot from a gaussian-filtered image
+    '''
     image_width, image_height = image.size   
     
     fig = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
@@ -292,7 +402,9 @@ def plot_gaussian_filter(gauss_image, image, height, width, plot_name):
     return fig
 
 def plot_gaussian_filter_slider(img_gauss, red, green, blue, height, width, plot_name):
-    
+    ''' Create plot from a gaussian-filtered image
+        - provides a slider with which the sigma value for the gaussian-filter can be adjusted
+    '''
     image_width = 1024
     image_height = 768
     
@@ -341,7 +453,7 @@ salt_pepper = salt_pepper_noise(image_view, 10)
 gaussian = gaussian_filter_3_channels(red, green, blue, 2)
 
 # PLOT 1: Plot with original image
-plot_original = plot_original_image('image.jpg', height_big, width_big)
+plot_original = plot_original_image('image.jpg', height_big, width_big, "Original Image")
 
 # PLOT 2,3,4: Generate Plot for each color channel
 plot_red = plot_color_channel(red, image, height_small, width_small, "Red")

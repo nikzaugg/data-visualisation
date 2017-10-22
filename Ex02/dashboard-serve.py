@@ -10,7 +10,7 @@ import scipy
 import PIL as pil
 from PIL import Image
 from bokeh.plotting import figure, ColumnDataSource, curdoc
-from bokeh.layouts import layout, column, row, widgetbox
+from bokeh.layouts import column, row, widgetbox, layout
 from bokeh.models import Div, CustomJS, Slider
 from bokeh.models.widgets import Panel, Tabs
 
@@ -358,22 +358,20 @@ plot_salt_pepper, slider_salt_pepper = plot_salt_pepper_plot_slider(salt_pepper,
 plot_gaussian, slider_gaussian = plot_gaussian_filter_slider(gaussian, red, green, blue, height_medium, width_medium, "Gaussian Filter")   
 
 # Define Layout for dashboard
-dashboard = layout(
-        row(dashboard_title),
-        row(dashboard_subtitle),
-        row([
-            column([row(plot_original), 
+curdoc().add_root(row(dashboard_title))
+curdoc().add_root(row(dashboard_subtitle))
+curdoc().add_root(row([
+            column([
+                row(plot_original), 
                 row([plot_red,plot_green,plot_blue])
-                    ]),
-            column([row(plot_tabs),
-                    row([plot_salt_pepper, slider_salt_pepper]),
-                    row([plot_gaussian, slider_gaussian])
-                    ])
-        ])) 
-
-curdoc().add_root(dashboard)
-
-
+            ]),
+            column([
+                row(plot_tabs),
+                row([plot_salt_pepper, slider_salt_pepper]),
+                row([plot_gaussian, slider_gaussian])
+            ])
+        ])
+        ) 
 # =============================================================================
 # =============================================================================
 # LAYOUT TESTS 

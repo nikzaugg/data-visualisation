@@ -229,7 +229,7 @@ def gaussian_filter_3_channels(red, green, blue, sigma):
 ###############################################################################
 # DEFINE PLOT FUNCTIONS
 ###############################################################################
-def plot_original_image(image_path, height, width):
+def plot_original_image(image_path, height, width, plot_name):
     ''' Create plot showing the image loaded from the provided image_path 
     '''
     image, image_arr, image_view = loadImage(image_path)
@@ -401,6 +401,7 @@ def plot_gaussian_filter(gauss_image, image, height, width, plot_name):
             )
     
     return fig
+
 def plot_gaussian_filter_slider(gaussians, height, width, plot_name):
     
     data_dict = {
@@ -484,7 +485,7 @@ gaussian_5 = gaussian_filter_3_channels(red, green, blue, 5)
 gaussians = [gaussian_0, gaussian_1, gaussian_2, gaussian_3, gaussian_4, gaussian_5]
 
 # PLOT 1: Plot with original image
-plot_original = plot_original_image('image.jpg', height_big, width_big)
+plot_original = plot_original_image('image.jpg', height_big, width_big, "Original Image")
 
 # PLOT 2,3,4: Generate Plot for each color channel
 plot_red = plot_color_channel(red, image, height_small, width_small, "Red Color Channel")

@@ -502,7 +502,7 @@ plot_tabs = plot_grayscale_and_reduced(grey, reduced, image, height_medium, widt
 plot_salt_pepper, slider_salt_pepper = plot_salt_pepper_plot_slider(salt_pepper, image_view, height_medium, width_medium, "Random Salt & Pepper Noise")       
 
 # PLOT 7: Generate plot with gaussian filter applied to it
-plot_gaussian, slider_gaussian = plot_gaussian_filter_slider(gaussian, red, green, blue, height_medium, width_medium, "Gaussian Filter")   
+plot_gaussian, slider_gaussian = plot_gaussian_filter_slider(gaussian, red, green, blue, height_medium, width_medium, "Gaussian Filter Blurring")   
 
 # Define Layout for dashboard and add to root document
 curdoc().add_root(row(dashboard_title))

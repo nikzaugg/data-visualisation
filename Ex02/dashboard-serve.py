@@ -371,11 +371,12 @@ def plot_salt_pepper_plot_slider(img_noise, image_view, height, width, plot_name
 
     # Define Slider
     salt_pepper_slider = Slider(
-            title = 'Percentage of Noise', 
             start=0, 
             end=50, 
             step=1, 
-            value=10
+            value=10,
+            width=180,
+            title="Noise Percentage"
             )
 
     # Update functions that gets triggered everytime the slider is adjusted
@@ -396,8 +397,20 @@ def plot_gaussian_filter(gauss_image, image, height, width, plot_name):
     '''
     image_width, image_height = image.size   
     
-    fig = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
-    gauss_image = fig.image_rgba(image=[gauss_image], x=0, y=0, dw=image_width, dh=image_height)
+    fig = figure(
+            title=plot_name, 
+            x_range=(0, image_width), 
+            y_range=(0, image_height), 
+            plot_width = width, 
+            plot_height = height
+            )
+    
+    gauss_image = fig.image_rgba(
+            image=[gauss_image], 
+            x=0, y=0, 
+            dw=image_width, 
+            dh=image_height
+            )
     
     return fig
 
@@ -408,10 +421,29 @@ def plot_gaussian_filter_slider(img_gauss, red, green, blue, height, width, plot
     image_width = 1024
     image_height = 768
     
-    fig = figure(title=plot_name, x_range=(0, image_width), y_range=(0, image_height), plot_width = width, plot_height = height)
-    image = fig.image_rgba(image=[img_gauss], x=0, y=0, dw=image_width, dh=image_height)
+    fig = figure(
+            title=plot_name, 
+            x_range=(0, image_width), 
+            y_range=(0, image_height), 
+            plot_width = width, 
+            plot_height = height
+            )
+    image = fig.image_rgba(
+            image=[img_gauss], 
+            x=0, 
+            y=0, 
+            dw=image_width, 
+            dh=image_height
+            )
         
-    gauss_slider = Slider(title = 'Sigma value', start=0, end=5, step=1, value=2)
+    gauss_slider = Slider(
+            start=0, 
+            end=5, 
+            step=1, 
+            value=2, 
+            width=180, 
+            title="Sigma Value"
+            ) 
 
     def update_gaussian(attrname, old, new):
         new_image = gaussian_filter_3_channels(red, green, blue, gauss_slider.value)
@@ -425,20 +457,25 @@ def plot_gaussian_filter_slider(img_gauss, red, green, blue, height, width, plot
 
 ###############################################################################
 # Main Program
+# By running this script with 'bokeh serve dashboard-serve.py' the dashboard will be loaded
+# Open http://localhost:5006/dashboard-serve to see the dashboard
 ###############################################################################
 
 # Define dashboard parameters
-dashboard_width = 1300
 width_big = 900
-width_medium = 400
 width_small = 300
-height_big = 594
-height_medium = 274
-height_small = 200
+
+height_big = int(width_big * (3/4.0))
+height_small = int(width_small * (3/4.0))
+
+height_medium = int(((height_big + height_small)/3)-20)
+width_medium = int((4/3) * height_medium)
+
+dashboard_width = width_big + width_medium
 
 # Create HTML-tags for title and subtitle
 dashboard_title = Div(text= '<div style="text-align: center; margin-top: 10px !important; padding: 0 !important;"><h1 style="margin-bottom: 0 !important;">Dashboard</h1></div>', width= dashboard_width)
-dashboard_subtitle = Div(text= '<div style="text-align: center; color: grey"><h2>Image Processing Applications</h1></div>', width= dashboard_width)
+dashboard_subtitle = Div(text= '<div style="text-align: center; color: grey"><h2>overview of different image processing methods</h1></div>', width= dashboard_width)
 
 # Load the image details for later plotting
 image, image_arr, image_view = loadImage('image.jpg')
@@ -447,9 +484,7 @@ image, image_arr, image_view = loadImage('image.jpg')
 red, green, blue = getColorChannels(image_view)
 grey = get_grayscale_channel(image_view)
 reduced = reduced_color_channel(image_view, 3)
-
 salt_pepper = salt_pepper_noise(image_view, 10)
-
 gaussian = gaussian_filter_3_channels(red, green, blue, 2)
 
 # PLOT 1: Plot with original image
@@ -467,9 +502,9 @@ plot_tabs = plot_grayscale_and_reduced(grey, reduced, image, height_medium, widt
 plot_salt_pepper, slider_salt_pepper = plot_salt_pepper_plot_slider(salt_pepper, image_view, height_medium, width_medium, "Random Salt & Pepper Noise")       
 
 # PLOT 7: Generate plot with gaussian filter applied to it
-plot_gaussian, slider_gaussian = plot_gaussian_filter_slider(gaussian, red, green, blue, height_medium, width_medium, "Gaussian Filter")   
+plot_gaussian, slider_gaussian = plot_gaussian_filter_slider(gaussian, red, green, blue, height_medium, width_medium, "Gaussian Filter Blurring")   
 
-# Define Layout for dashboard
+# Define Layout for dashboard and add to root document
 curdoc().add_root(row(dashboard_title))
 curdoc().add_root(row(dashboard_subtitle))
 curdoc().add_root(row([
@@ -484,46 +519,4 @@ curdoc().add_root(row([
             ])
         ])
         ) 
-# =============================================================================
-# =============================================================================
-# LAYOUT TESTS 
-# TODO: remove after 
-# =============================================================================
-# fig1 = figure(title="TEST", x_range=(0, 1024), y_range=(0, 768), plot_width = 900, plot_height = 594)
-# fig2 = figure(title="TEST", x_range=(0, 1024), y_range=(0, 768), plot_width = 300, plot_height = 200)
-# fig3 = figure(title="TEST", x_range=(0, 1024), y_range=(0, 768), plot_width = 300, plot_height = 200)
-# fig4 = figure(title="TEST", x_range=(0, 1024), y_range=(0, 768), plot_width = 300, plot_height = 200)
-# 
-# fig5 = figure(title="TEST", x_range=(0, 1024), y_range=(0, 768), plot_width = 400, plot_height = 274)
-# 
-# fig6 = figure(title="TEST", x_range=(0, 1024), y_range=(0, 768), plot_width = 400, plot_height = 274)
-# fig7 = figure(title="TEST", x_range=(0, 1024), y_range=(0, 768), plot_width = 400, plot_height = 274)
-# 
-# slide = Slider(start=1, end=5, step=1, value=2)
-# slider = widgetbox(slide)
-# 
-# slide2 = Slider(start=1, end=5, step=1, value=2)
-# slider2 = widgetbox(slide2)
-# =============================================================================
-# dashboard = layout(row(dashboard_title),
-#         row(dashboard_subtitle),
-#         row([
-#             column([row(fig1), 
-#                     row([fig2,fig3,fig4])
-#                     ]),
-#             column([row(fig5),
-#                     row([fig6, slider]),
-#                     row([fig7, slider2])
-#                     ])
-#         ]))
-# =============================================================================
-# Load the dasboard into the output_file  
-# show(dashboard)
-# =============================================================================
-# =============================================================================
-
-
-
-
-
-    
+ 

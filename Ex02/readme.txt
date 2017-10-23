@@ -12,19 +12,17 @@ Versions:
     tornado: 4.4.2
 
 How to run:
-    -   make sure you are using python module Tornado 4.4.* for a bokeh server
-    -   run conda install tornado=4.4 to downgrade (current version is most likely on 4.5.2)
+    -   make sure you are using python module Tornado 4.4.2 for a bokeh server (4.5.2 still not properly working with bokeh https://github.com/bokeh/bokeh/issues/6152)
+    -   run conda install tornado=4.4.2 to downgrade (current version is most likely on 4.5.2)
     -   run bokeh server:
-            In Anaconda-CLI: run 'bokeh serve --show dashboard-serve.py'
-            Other CLI: run 'python -m bokeh serve --show .\dashboard-serve.py'
+            - In Anaconda-CLI: run 'bokeh serve --show dashboard-serve.py'
+                OR 
+            - Other CLI: run 'python -m bokeh serve --show .\dashboard-serve.py'
 
             --> this will open the dashboard in a browser-tab
 
-Alternatives:
+Alternative:
     -   Project folder contains file 'dashboard.py' which uses CustomJS to update data of the images.
-        As all data needs to be loaded beforehand, the resulting dashboard.html is larger than 200MB.
-        - Run dashboard.py to generate 'dashboard.html'
-    
-    -   Screenshots of the dasboard at different stages
-
-    -   dashboard.zip contains a precompiled dashboard
+        As all data needs to be loaded beforehand, the resulting dashboard.html is ~75MB.
+        - Run 'dashboard.py' to generate 'dashboard.html'
+          => Salt & Pepper percentages available only between 0% and 50% with 10% steps

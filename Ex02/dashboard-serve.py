@@ -160,8 +160,6 @@ def get_grayscale_channel(image):
 def reduced_color_channel(image, size):
     ''' Reduce the amount of different colors in the image
     '''
-    # TODO: implement function that allows for more control
-    # This is not the algo we saw in the exercise
     from scipy import ndimage
     copy_image = np.copy(image)
     return ndimage.median_filter(copy_image, size)

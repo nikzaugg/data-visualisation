@@ -489,9 +489,9 @@ gaussian = gaussian_filter_3_channels(red, green, blue, 2)
 plot_original = plot_original_image('image.jpg', height_big, width_big, "Original Image")
 
 # PLOT 2,3,4: Generate Plot for each color channel
-plot_red = plot_color_channel(red, image, height_small, width_small, "Red")
-plot_green = plot_color_channel(green, image, height_small, width_small, "Green")
-plot_blue = plot_color_channel(blue, image, height_small, width_small, "Blue")
+plot_red = plot_color_channel(red, image, height_small, width_small, "Red Channel")
+plot_green = plot_color_channel(green, image, height_small, width_small, "Green Channel")
+plot_blue = plot_color_channel(blue, image, height_small, width_small, "Blue Channel")
 
 # PLOT 5: Generate tab-plot with grayscale & reduced colors
 plot_tabs = plot_grayscale_and_reduced(grey, reduced, image, height_medium, width_medium, 'Greyscale & Reduced Color')

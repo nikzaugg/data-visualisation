@@ -1,0 +1,13 @@
+# Question 1: What type of variables has the Iris dataset? Refer the type of each variable.
+# sepal_length: Is an ordinal variable which is continuous and ordinal.
+# sepal_width: Is an ordinal variable which is continuous and ordinal.
+# petal_length: Is an ordinal variable which is continuous and ordinal.
+# petal_width: Is an ordinal variable which is continuous and ordinal.
+# species: Is a nominal variable and categorical.
+
+# Question 2: How many features are included in the Iris dataset? Which are they?
+# three features, x and y coordinates as well as the name of the flowers
+
+# Question 3: Compare the clustering results with the original labelling. What do you notice from the comparison?
+
+The training data is very accurate. We get accuracy of over 90%, mostly > 94%.

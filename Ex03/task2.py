@@ -3,6 +3,7 @@ import random
 import math
 import operator
 import numpy as np
+import task1
 
 # TODO: remove link, only for validating implementation
 #https://machinelearningmastery.com/tutorial-to-implement-k-nearest-neighbors-in-python-from-scratch/
@@ -162,30 +163,32 @@ errors = np.array(errors[:, :-1], dtype=float)
 
 # build the cluster-plot
 from bokeh.plotting import figure, output_file, show
-circle_size = 8
+circle_size = 6
 
-p = figure(plot_width=750, plot_height=750, x_range=(4, 9), y_range=(1, 6))
+#p = figure(plot_width=750, plot_height=750, x_range=(4, 9), y_range=(1, 6))
+
+p = task1.get_dataSet_plot()
 
 p.circle(
     class_1[:,0],
     class_1[:,1],
     size=circle_size,
-    color="red",
-    legend='Iris-setosa'
+    fill_color="orangered",
+    legend = "cluster setosa"
     )
 p.circle(
     class_2[:,0],
     class_2[:,1],
     size=circle_size,
-    color="blue",
-    legend='Iris-versicolor'
+    fill_color="aqua",
+    legend = "cluster versicolor"
     )
 p.circle(
     class_3[:,0],
     class_3[:,1],
     size=circle_size,
-    color="green",
-    legend='Iris-virginica'
+    fill_color="palegreen",
+    legend = "cluster virginica"
     )
 p.circle(
     errors[:,0],
@@ -195,9 +198,7 @@ p.circle(
     legend='wrongly classified'
     )
 
-# set axis titles
-p.xaxis.axis_label = 'sepal length'
-p.yaxis.axis_label = 'sepal width'
+
 
 # display plot
 show(p)

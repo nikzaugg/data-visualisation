@@ -6,16 +6,7 @@
 # Create a 2D plot (Plot1) from data in Iris dataset, using the sepal length and sepal width. Use
 # separate color for each species for visually identifying the iris species.
 
-# Question 1: What type of variables has the Iris dataset? Refer the type of each variable.
-# sepal_length: Is an ordinal variable which is continuous and ordinal.
-# sepal_width: Is an ordinal variable which is continuous and ordinal.
-# petal_length: Is an ordinal variable which is continuous and ordinal.
-# petal_width: Is an ordinal variable which is continuous and ordinal.
-# species: Is a nominal variable and categorical.
 
-
-# Question 2: How many features are included in the Iris dataset? Which are they?
-# three features, x and y coordinates as well as the name of the flowers
 
 import numpy as np
 import pandas as pd
@@ -78,7 +69,7 @@ virginica_sepal_length, virginica_sepal_width = getSepalDataset(virginica_flower
 output_file('task1.html')
 
 # size of points on the plot
-cirle_size = 6
+cirle_size = 10
 
 # specify a hover tool
 hover = HoverTool(tooltips=[
@@ -96,23 +87,25 @@ flower_plot.circle(
         setosa_sepal_length,
         setosa_sepal_width,
         size=cirle_size,
-        color="red",
+        color="darkred",
         legend='Iris-setosa')
 
 flower_plot.circle(
         versicolor_sepal_length,
         versicolor_sepal_width,
         size=cirle_size,
-        color="blue",
+        color="darkblue",
         legend='Iris-versicolor')
 
 flower_plot.circle(
         virginica_sepal_length,
         virginica_sepal_width,
         size=cirle_size,
-        color="green",
+        color="darkgreen",
         legend='Iris-virginica')
 
+def get_dataSet_plot():
+    return flower_plot
 
 # Name the axis of the plot
 flower_plot.xaxis.axis_label = 'Sepal length'

@@ -198,8 +198,6 @@ p.circle(
     legend='wrongly classified'
     )
 
-
-
 # display plot
 show(p)
 

@@ -4,6 +4,8 @@ standard deviation of each attribute. The results should be presented automatica
 the code. 
 '''
 
+import numpy as np
+
 def loadDataSet(filename):
     import csv
     
@@ -19,17 +21,20 @@ def loadDataSet(filename):
 def calc_max(data):
     sum = [0,0,0,0]
     max = [0,0,0,0]
+    
     for i in range(len(data)):
         for j in range(len(data[0]) - 1):
             # caluculate max
             if float(data[i][j]) > float(max[j]):
                 max[j] = round(float(data[i][j]), 2)           
+    
     return max
 
 
 def calc_min(data):
+    from math import inf
     sum = [0,0,0,0]
-    min = [0,0,0,0]
+    min = [inf,inf,inf,inf]
     for i in range(len(data)):
         for j in range(len(data[0]) - 1):
             # caluculate min
@@ -44,13 +49,11 @@ def calc_sum(data):
         for j in range(len(data[0]) - 1):
             # calculate sum
             sum[j] += float(data[i][j])
-    print(sum)
     return sum
 
 
 def calc_mean(data):
     sum = calc_sum(data)
-    print(sum)
     mean = [0,0,0,0]
     # get mean
     for i in range(len(data[0]) - 1):
@@ -58,18 +61,17 @@ def calc_mean(data):
     return mean
 
 
-def standard_deviation(data):
+def calc_standard_deviation(data):
     from math import sqrt
-    intermediate = [0,0,0,0]
     sd = [0,0,0,0]
+    intermediate = [0,0,0,0]
+    mean = calc_mean(data)
 
     for i in range(len(data)):
         for j in range(len(data[0]) - 1):
-            intermediate[j] += (float(data[i][j]) - intermediate[j])**2
-    
+            intermediate[j] += (float(data[i][j]) - mean[j])**2
     for j in range(len(data[0]) - 1):
-        sd[j] = round(sqrt(1/len(data) * sd[j]), 2)
-
+        sd[j] = round(sqrt(1/len(data) * intermediate[j]), 2)
     return sd
 
 def loadDataSet(filename):
@@ -109,4 +111,31 @@ species1 = getFlowerDataset(data, 'Iris-setosa')
 species2 = getFlowerDataset(data, 'Iris-versicolor')
 species3 = getFlowerDataset(data, 'Iris-virginica')
 
-print(calc_mean(species1))
+flowersets = []
+
+flowersets.append(species1)
+flowersets.append(species2)
+flowersets.append(species3)
+flowersets.append(data)
+
+calc_rows = []
+
+for set in flowersets:
+    rows = []
+    rows.append(calc_max(set))
+    rows.append(calc_min(set))
+    rows.append(calc_mean(set))
+    rows.append(calc_standard_deviation(set))
+    
+    calc_rows.append(rows)
+
+flower_words = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica', 'Total']
+words = ['max \t\t|', 'min \t\t|', 'mean \t\t|', 'stand. dev. \t|']
+first_row = "Attributes \t| sepal length \t| sepal width \t| petal length \t| petal width"
+
+for i in range(len(flowersets)):
+    print(flower_words[i])
+    print(first_row)
+    for x in range(len(calc_rows[i])):
+        print(words[x],"\t\t| ".join(map(str, calc_rows[i][x])))  
+    print("\n")

@@ -10,106 +10,40 @@
 
 import numpy as np
 import pandas as pd
-from bokeh.plotting import figure, ColumnDataSource, output_file, show
-from bokeh.models import HoverTool
+from bokeh.plotting import output_file, show
+import func as f
 
-def loadDataSet(filename):
-    ''' Load a .data file into a data set
-    # sepal_length, sepal_width, petal_length, petal_width, species
-    # Iris-setosa
-    # Iris-versicolor
-    # Iris-virginica
-
-    Arguments: 
-        - filename
-    Return:
-        - dataset as list
-    '''
-    import csv
-    
-    data = []
-    with open(filename, 'rt', encoding='utf8') as csvfile:
-        lines = csv.reader(csvfile)
-        for row in lines:
-            data.append(row)
-    
-    return data
-
-def getFlowerDataset(data, flowerName):
-    ''' Split data into its flower category
-    '''
-    flowers = []
-    for x in range(len(data)-1):
-        if data[x][4] == flowerName:
-            flowers.append(data[x])
-    return flowers
-
-def getSepalDataset(data):
-    ''' Extract sepal width and length of flower data set
-    '''
-    lengths = []
-    widths = []
-    for x in range(len(data)):
-        lengths.append(float(data[x][0]))
-        widths.append(float(data[x][1]))
-
-    return lengths, widths
 
 # Main Program
-dataset = loadDataSet('iris.data')
-setosa_flowers = getFlowerDataset(dataset, 'Iris-setosa')
-versicolor_flowers = getFlowerDataset(dataset, 'Iris-versicolor')
-virginica_flowers = getFlowerDataset(dataset, 'Iris-virginica')
+dataset = f.loadDataSet('iris.data')
+setosa_flowers = f.getFlowerDataset(dataset, 'Iris-setosa')
+versicolor_flowers = f.getFlowerDataset(dataset, 'Iris-versicolor')
+virginica_flowers = f.getFlowerDataset(dataset, 'Iris-virginica')
 
-setosa_sepal_length, setosa_sepal_width = getSepalDataset(setosa_flowers)
-versicolor_sepal_length, versicolor_sepal_width = getSepalDataset(versicolor_flowers)
-virginica_sepal_length, virginica_sepal_width = getSepalDataset(virginica_flowers)
+setosa_sepal_length, setosa_sepal_width = f.getSepalDataset(setosa_flowers)
+versicolor_sepal_length, versicolor_sepal_width = f.getSepalDataset(versicolor_flowers)
+virginica_sepal_length, virginica_sepal_width = f.getSepalDataset(virginica_flowers)
 
 #Plot Task 1
 output_file('task1.html')
 
-# size of points on the plot
-cirle_size = 10
-
-# specify a hover tool
-hover = HoverTool(tooltips=[
-    ("Sepal length", "@x"),
-    ("Sepal width", "@y"),
-])
-
-# create bokeh figure
-flower_plot = figure(
-    plot_width=700, 
-    plot_height=600,
-    tools= [hover])
-
-flower_plot.circle(
-        setosa_sepal_length,
-        setosa_sepal_width,
-        size=cirle_size,
-        color="darkred",
-        legend='Iris-setosa')
-
-flower_plot.circle(
-        versicolor_sepal_length,
-        versicolor_sepal_width,
-        size=cirle_size,
-        color="darkblue",
-        legend='Iris-versicolor')
-
-flower_plot.circle(
-        virginica_sepal_length,
-        virginica_sepal_width,
-        size=cirle_size,
-        color="darkgreen",
-        legend='Iris-virginica')
-
-def get_dataSet_plot():
-    return flower_plot
-
-# Name the axis of the plot
-flower_plot.xaxis.axis_label = 'Sepal length'
-flower_plot.yaxis.axis_label = 'Sepal width'
+plot = f.plot_iris_data(
+    setosa_sepal_length, 
+    setosa_sepal_width, 
+    versicolor_sepal_length,  
+    versicolor_sepal_width,
+    virginica_sepal_length,
+    virginica_sepal_width,
+    "red",
+    "blue",
+    "green",
+    "Iris-setosa",
+    "Iris-versicolor",
+    "Iris-virginica",
+    "Sepal length",
+    "Sepal width",
+    10
+    )
 
 # Display the plot in html file
-show(flower_plot)
+show(plot)

@@ -1,21 +1,41 @@
 Task 1
 # Question 1: What type of variables has the Iris dataset? Refer the type of each variable.
-sepal_length: Is an ordinal variable which is continuous and ordinal.
-sepal_width: Is an ordinal variable which is continuous and ordinal.
-petal_length: Is an ordinal variable which is continuous and ordinal.
-petal_width: Is an ordinal variable which is continuous and ordinal.
-species: Is a nominal variable and categorical.
+    sepal_length: Is an ordinal variable which is continuous and ordinal.
+    sepal_width: Is an ordinal variable which is continuous and ordinal.
+    petal_length: Is an ordinal variable which is continuous and ordinal.
+    petal_width: Is an ordinal variable which is continuous and ordinal.
+    species: Is a nominal variable and categorical.
 
 # Question 2: How many features are included in the Iris dataset? Which are they?
-three features, x and y coordinates as well as the name of the flowers
+    three features, x and y coordinates as well as the name of the flowers
 
 Task 3
 # Question 3: Compare the clustering results with the original labelling. What do you notice from the comparison?
 
-The training data is very good. We get accuracy of over 90%, mostly > 95%. 
+    The training data is very good. We get accuracy of over 90%, mostly > 95%. 
 
 Task 5
 # Question 4: What should we do in order to avoid such kind of problems?
 
-The normalization of all values to the interval [0, 1] would allow to compare variables that were originally unrelated.
+    The normalization of all values to the interval [0, 1] would allow to compare variables that were originally unrelated.
 
+
+Task 6
+# Question 5: Which class presents higher correlation? How much is it?
+
+    Intraclass correlations are:
+
+    Iris-setosa
+    Intraclass correlation: ->  0.747  <-
+    ------------------------------
+
+
+    Iris-versicolor
+    Intraclass correlation: ->  0.526  <-
+    ------------------------------
+
+
+    Iris-virginica
+    Intraclass correlation: ->  0.465  <-
+
+    Iris-setosa cluster has the highest intraclass correlation.

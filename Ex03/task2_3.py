@@ -1,3 +1,19 @@
+'''
+Data Visualization
+Exercise 03
+Task 2/3
+Author: Nik Zaugg
+Student Number: 12-716-734
+
+
+Implement a weighted K-NN classification algorithm, following the instructions given during the
+lab session. The weights should be defined in such a way, so that the nearer neighbors to contribute
+more to the average than the more distant ones. For this, you can apply a weight of 1/d,
+where d is the distance to the neighbor. Distance could be based on Euclidean or Manhattan
+measurement.
+Your classification algorithm should be able to be applied to the provided Iris dataset.
+'''
+
 import csv
 import random
 import math
@@ -7,9 +23,13 @@ import func as f
 from bokeh.plotting import show
 
 # Task 2
+
+# Run k_nearest algorithm of the iris data set
 trainingSet, testSet, matched = f.k_nearest('iris.data', 3, 0.7)
 
 # Task 3
+
+# Separate correcly and incorrectly clustered datapoints
 correctly_clustered = []
 incorrectly_clustered = []
 for i in range(len(matched)):
@@ -27,6 +47,7 @@ class_3 = []
 # Error class
 errors = []
 
+# Split the correctly clustered into data sets
 for i in range(len(correctly_clustered)):  
     if correctly_clustered[i][0][-1] == 'Iris-setosa':
         class_1.append(correctly_clustered[i][0])
@@ -37,6 +58,7 @@ for i in range(len(correctly_clustered)):
     elif correctly_clustered[i][0][-1] == 'Iris-virginica':
         class_3.append(correctly_clustered[i][0]) 
 
+# Split the correctly clustered into data set
 for i in range(len(incorrectly_clustered)):
      errors.append(incorrectly_clustered[i][0])
 
@@ -74,38 +96,42 @@ plot = f.plot_iris_data(
     versicolor_sepal_width,
     virginica_sepal_length,
     virginica_sepal_width,
-    "red",
-    "blue",
-    "green",
+    "gray",
+    "orange",
+    "olive",
     "Iris-setosa",
     "Iris-versicolor",
     "Iris-virginica",
     "Sepal length",
     "Sepal width",
-    10
+    12
     )
 
-circle_size = 6
+# Include result data from the knn clustering into plot 1
+circle_size = 7
 
 plot.circle(
     class_1[:,0],
     class_1[:,1],
     size=circle_size,
-    fill_color="orangered",
+    color = 'black',
+    fill_color="gray",
     legend = "cluster setosa"
     )
 plot.circle(
     class_2[:,0],
     class_2[:,1],
     size=circle_size,
-    fill_color="aqua",
+    color = 'black',
+    fill_color="orange",
     legend = "cluster versicolor"
     )
 plot.circle(
     class_3[:,0],
     class_3[:,1],
     size=circle_size,
-    fill_color="palegreen",
+    color = 'black',
+    fill_color="olive",
     legend = "cluster virginica"
     )
 plot.circle(
@@ -113,7 +139,8 @@ plot.circle(
     errors[:,1],
     size=circle_size,
     color="black",
-    legend='wrongly classified'
+    fill_color="red",
+    legend='erroneously clustered'
     )
 
 # display plot

@@ -34,6 +34,7 @@ virginica_sepal_length, virginica_sepal_width = f.getSepalDataset(virginica_flow
 output_file('task1.html')
 
 plot = f.plot_iris_data(
+    "Original Iris Dataset - Sepal length vs. Sepal width",
     setosa_sepal_length, 
     setosa_sepal_width, 
     versicolor_sepal_length,  

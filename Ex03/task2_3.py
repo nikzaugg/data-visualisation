@@ -90,6 +90,7 @@ versicolor_sepal_length, versicolor_sepal_width = f.getSepalDataset(versicolor_f
 virginica_sepal_length, virginica_sepal_width = f.getSepalDataset(virginica_flowers)
 
 plot = f.plot_iris_data(
+    "Iris Dataset - KNN clustering ",
     setosa_sepal_length, 
     setosa_sepal_width, 
     versicolor_sepal_length,  

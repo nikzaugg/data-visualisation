@@ -69,7 +69,7 @@ def getFlowerDataset(data, flowerName):
         flowerName (str): name of the flower
     '''
     flowers = []
-    for x in range(len(data)-1):
+    for x in range(len(data)):
         if data[x][4] == flowerName:
             flowers.append(data[x])
     return flowers
@@ -229,7 +229,7 @@ def k_nearest(filename, k, split):
 
     return trainingSet, testSet, matched
 
-def plot_iris_data(x1, y1, x2, y2, x3, y3, color1, color2, color3, legend1, legend2, legend3, x_label, y_label, circle_size):
+def plot_iris_data(plot_title, x1, y1, x2, y2, x3, y3, color1, color2, color3, legend1, legend2, legend3, x_label, y_label, circle_size):
     '''
     Plot the iris data set
 
@@ -250,8 +250,9 @@ def plot_iris_data(x1, y1, x2, y2, x3, y3, color1, color2, color3, legend1, lege
 
     # create bokeh figure
     flower_plot = figure(
+        title=plot_title,
         plot_width=900, 
-        plot_height=900
+        plot_height=900,
     )
 
     flower_plot.circle(

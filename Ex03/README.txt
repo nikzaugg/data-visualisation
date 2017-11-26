@@ -48,7 +48,8 @@ Task 1
     species: Is a nominal variable and categorical.
 
 # Question 2: How many features are included in the Iris dataset? Which are they?
-    three features, x and y coordinates as well as the name of the flowers
+    If the attributes are considered as features, then the dataset contains four features.
+    If the plot of the dataset is considered, then it has three features x & y coordinate and the color of the circle
 
 
 Task 3
@@ -56,8 +57,7 @@ Task 3
 
     The training data is very good. We get accuracy of over 90%, mostly > 95%. 
 
-    If the testInstance is of class Iris-setosa, then it is classified correctly as the datapoints of Iris-setosa are closely
-    clustered. Wrongly classified data points occur between Iris-virginica and Iris-versicolor.
+    If the testInstance is of class Iris-setosa, then it is classified correctly as the datapoints of Iris-setosa are closely clustered. Wrongly classified data points occur between Iris-virginica and Iris-versicolor.
 
 
 Task 4
@@ -108,11 +108,9 @@ Task 6
     Intraclass correlation: ->  0.747  <-
     ------------------------------
 
-
     Iris-versicolor
     Intraclass correlation: ->  0.526  <-
     ------------------------------
-
 
     Iris-virginica
     Intraclass correlation: ->  0.465  <-
@@ -126,18 +124,18 @@ per attribute? How similar (dis-similar) are they?
 
     SIMILARITIES AND DISSIMILARITIES BETWEEN CLUSTERS
     Iris-setosa vs. Iris-versicolor
-    Similarity      |  0.2374
-    Dissimilarity   |  3.2118
+    Similarity      |  0.2378
+    Dissimilarity   |  3.2052
 
 
     Iris-setosa vs. Iris-virginica
-    Similarity      |  0.1733
-    Dissimilarity   |  4.7691
+    Similarity      |  0.1738
+    Dissimilarity   |  4.7526
 
 
     Iris-versicolor vs. Iris-virginica
-    Similarity      |  0.3803
-    Dissimilarity   |  1.6296
+    Similarity      |  0.3816
+    Dissimilarity   |  1.6205
 
 
     - Hightest similarity between cluster Iris-versicolor and Iris-virginica

@@ -2,3 +2,5 @@
 *.ini
 *.html
 *.pyc
+*.gz
+*.vscode

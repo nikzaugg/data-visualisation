@@ -54,14 +54,14 @@ import sys
 debug = False
 
 # path to store the data (needs to exist)
-path = 'resources'
+path = 'data'
 
 # matching string pattern
 # temperatures: 'TCf*'
 # surface tolology: 'HGT*'
 # more variables in the section 'Variable Descriptions'
 # http://www.vets.ucar.edu/vg/isabeldata/readme.html
-match = 'TCf01'
+match = 'HGT*'
 
 # laod data
 f = FileList(path, match, debug)

@@ -27,3 +27,13 @@ def read_data(datatype, hour):
 
     filename = DATA_FOLDER + datatype + 'f' + str_hour + '.bin'
     return np.memmap(filename, dtype=">f", mode="r", shape=(500, 500, 100), order='F')
+
+def read_geo_data(datatype, hour):
+    # formating the hour input to string and format '##'
+    str_hour = str(hour)
+    
+    if hour < 10:
+        str_hour = '0' + str_hour
+
+    filename = DATA_FOLDER + datatype + 'f' + str_hour + '.bin'
+    return np.memmap(filename, dtype=">f", mode="r", shape=(500, 500, 100), order='F')

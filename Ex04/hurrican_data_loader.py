@@ -61,7 +61,7 @@ path = 'data'
 # surface tolology: 'HGT*'
 # more variables in the section 'Variable Descriptions'
 # http://www.vets.ucar.edu/vg/isabeldata/readme.html
-match = 'HGT*'
+match = 'TCf05'
 
 # laod data
 f = FileList(path, match, debug)

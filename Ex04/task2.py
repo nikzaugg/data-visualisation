@@ -28,7 +28,7 @@ temps = data[LOGITUDE-1][LATITUDE]
 altitude = np.arange(MIN_HEIGHT, MAX_HEIGHT + DELTA, DELTA)
 
 # Set up the plot
-plt.plot(altitude, temps, color = 'red')
+plt.plot(altitude, temps, color = 'blue')
 plt.title('Temperature data at altitude levels in hour 1')
 plt.xlabel('Altitude levels [km]')
 plt.ylabel('Temperature [$^\circ$C]')

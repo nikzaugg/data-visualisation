@@ -17,9 +17,8 @@ import data_controller as dc
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Load contour map
+# Load terrain data
 data = dc.get_terrain_data()
-print(data)
 
 # Load temperature data for hour 1
 # Contains temperature values for the whole hurricane
@@ -40,6 +39,7 @@ plot.invert_yaxis()
 # plot the terrain data on the plot
 terrain_plot = plot.contour(data, cmap='terrain')
 
+# Set a colorbar
 colorbar = plt.colorbar(terrain_plot)
 colorbar.set_label('terrain elevation [m]')
 
@@ -48,16 +48,15 @@ colorbar.set_label('terrain elevation [m]')
 # To approximate 1km we need to consider step 5 = 0.035 + 5*0.2 = 1.035km
 ALTITUDE = 5
 
+# Get all temperature values at specified altitude
 temp_data_altitude = temp_data_hour_1[ : , : , ALTITUDE]
-print(temp_data_altitude)
 
 # plot the temperature data on the plot
-temp_contour = plot.contourf(temp_data_altitude, cmap='jet', alpha=1.0)
+temp_contour = plot.contourf(temp_data_altitude, cmap='jet', alpha=0.8)
 
-# add a colorbar indicating the temperature levels
+# Set a colorbar for the temperature levels
 colorbar = plt.colorbar(temp_contour)
 colorbar.set_label('Temperature')
 
-# show the plot
+# display plot
 plt.show()
-

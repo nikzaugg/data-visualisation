@@ -1,3 +1,10 @@
+# Data Visualisation
+# University of Zurich
+# Exercise 4
+# Nik Zaugg
+# 12-716-734
+# Task 3
+
 '''
 Although the above plot is quite informative, it provides information only for the first hour at the
 given location. Sometimes it is also useful to compare line plots for the same interval, such as
@@ -25,7 +32,7 @@ datasets = []
 
 # Load Temperature data for hours 1 to 5
 for i in range(1, 6):
-    datasets.append(dc.read_geo_data('TC',i))
+    datasets.append(dc.read_data('TC',i))
 
 # Temperature data per hour at position (200, 250)
 temperatures_per_hour = list()

@@ -1,3 +1,10 @@
+# Data Visualisation
+# University of Zurich
+# Exercise 4
+# Nik Zaugg
+# 12-716-734
+# Task 2
+
 '''
 Create a line plot, where the vertical axis will show the temperature (TCf) and the horizontal
 axis will show all the available altitude levels (height) for the location (200, 250) on the map.
@@ -22,7 +29,7 @@ DELTA = 0.2
 data = dc.read_data('TC', 1)
 
 # Gives back 100 values of temperatures at the 100 predefined height levels (y-values)
-temps = data[LOGITUDE-1][LATITUDE]
+temps = data[LOGITUDE-1][LATITUDE-1]
 
 # x values should represent the altitude levels
 altitude = np.arange(MIN_HEIGHT, MAX_HEIGHT + DELTA, DELTA)

@@ -17,46 +17,62 @@ import data_controller as dc
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Load terrain data
-data = dc.get_terrain_data()
+def task4_color_contour_map():
 
-# Load temperature data for hour 1
-# Contains temperature values for the whole hurricane
-temp_data_hour_1 = dc.read_data('TC', 1)
+    # Load terrain data
+    data = dc.get_terrain_data()
+    # Set up terrain plot
+    fig, plot = plt.subplots()
+    fig.canvas.set_window_title('TASK 4') 
+    plot.set_title('Temperatures at altitude of 1km')
+    plot.set_xlabel('Longitude (X)')
+    plot.set_ylabel('Latitude (Y)')
+    plot.set_aspect(1)
+    plot.invert_yaxis()
+    # plot the terrain data on the plot
+    terrain_plot = plot.contour(data, cmap='terrain')
 
-fig, plot = plt.subplots()
+    # Set a colorbar
+    colorbar = plt.colorbar(terrain_plot)
+    colorbar.set_label('terrain elevation [m]')
 
-fig.canvas.set_window_title('TASK 4') 
+    # Load temperature data for hour 1
+    # Contains temperature values for the whole hurricane
+    temp_data_hour_1 = dc.read_data('TC', 1)
 
-plot.set_title('Temperatures at altitude of 1km')
+    # Define the altitude at which we want to plot the color contour
+    # Altitude begins at 0.035 km with a delta/step-size of 0.2 km
+    # To approximate 1km we need to consider step 5 = 0.035 + 5*0.2 = 1.035km
+    ALTITUDE = 5
 
-plot.set_xlabel('Longitude (X)')
-plot.set_ylabel('Latitude (Y)')
-plot.set_aspect(1)
+    # Get all temperature values at specified altitude
+    temp_data_altitude = temp_data_hour_1[ : , : , ALTITUDE]
 
-plot.invert_yaxis()
+    # plot the temperature data on the plot
+    temp_contour = plot.contourf(temp_data_altitude, cmap='jet', alpha=0.8)
 
-# plot the terrain data on the plot
-terrain_plot = plot.contour(data, cmap='terrain')
+    # Set a colorbar for the temperature levels
+    colorbar = plt.colorbar(temp_contour)
+    colorbar.set_label('Temperature')
 
-# Set a colorbar
-colorbar = plt.colorbar(terrain_plot)
-colorbar.set_label('terrain elevation [m]')
+    # display plot
+    plt.show()
 
-# Define the altitude at which we want to plot the color contour
-# Altitude begins at 0.035 km with a delta/step-size of 0.2 km
-# To approximate 1km we need to consider step 5 = 0.035 + 5*0.2 = 1.035km
-ALTITUDE = 5
+def color_contour_map_data():
+    
+    # Load terrain data
+    data = dc.get_terrain_data()
 
-# Get all temperature values at specified altitude
-temp_data_altitude = temp_data_hour_1[ : , : , ALTITUDE]
+    # Load temperature data for hour 1
+    # Contains temperature values for the whole hurricane
+    temp_data_hour_1 = dc.read_data('TC', 1)
 
-# plot the temperature data on the plot
-temp_contour = plot.contourf(temp_data_altitude, cmap='jet', alpha=0.8)
+    # Define the altitude at which we want to plot the color contour
+    # Altitude begins at 0.035 km with a delta/step-size of 0.2 km
+    # To approximate 1km we need to consider step 5 = 0.035 + 5*0.2 = 1.035km
+    ALTITUDE = 5
 
-# Set a colorbar for the temperature levels
-colorbar = plt.colorbar(temp_contour)
-colorbar.set_label('Temperature')
+    # Get all temperature values at specified altitude
+    temp_data_altitude = temp_data_hour_1[ : , : , ALTITUDE]
 
-# display plot
-plt.show()
+    return temp_data_altitude

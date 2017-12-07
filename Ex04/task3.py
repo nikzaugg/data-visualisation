@@ -19,48 +19,79 @@ import numpy as np
 import matplotlib.pyplot as plt
 import data_controller as dc
 
-# The position in the hurricane from which we want to plot the data
-LONGITUDE = 200
-LATITUDE = 250
+def task3_stacked_lines():
+    '''
+    Plot stacked line plot of temparatures of hours 1 to 5
+    '''
 
-# 0.0.35 km to 19.835 km spaced with delta = 0.2 km
-MIN_HEIGHT = 0.035
-MAX_HEIGHT = 19.835
-DELTA = 0.2
+    # The position in the hurricane from which we want to plot the data
+    LONGITUDE = 200
+    LATITUDE = 250
 
-datasets = []
+    # 0.0.35 km to 19.835 km spaced with delta = 0.2 km
+    MIN_HEIGHT = 0.035
+    MAX_HEIGHT = 19.835
+    DELTA = 0.2
 
-# Load Temperature data for hours 1 to 5
-for i in range(1, 6):
-    datasets.append(dc.read_data('TC',i))
+    datasets = []
 
-# Temperature data per hour at position (200, 250)
-temperatures_per_hour = list()
-for i in range(0, 5):
-    temperatures_per_hour.append(datasets[i][LONGITUDE - 1][LATITUDE - 1])
+    # Load Temperature data for hours 1 to 5
+    for i in range(1, 6):
+        datasets.append(dc.read_data('TC',i))
 
-# x values should represent the altitude levels
-altitude = np.arange(MIN_HEIGHT, MAX_HEIGHT + DELTA, DELTA)
+    # Temperature data per hour at position (200, 250)
+    temperatures_per_hour = list()
+    for i in range(0, 5):
+        temperatures_per_hour.append(datasets[i][LONGITUDE - 1][LATITUDE - 1])
 
-
-figure, plot = plt.subplots()
-
-
-figure.canvas.set_window_title("Task 3")
-
-
-plot.set_title("Temperatures at different altitude levels. (200, 250)")
-plot.set_xlabel("Altitude Level [km]")
-plot.set_ylabel("Temperature [$^\circ$C]")
-plot.minorticks_on()
+    # x values should represent the altitude levels
+    altitude = np.arange(MIN_HEIGHT, MAX_HEIGHT + DELTA, DELTA)
 
 
-plot.plot(altitude, temperatures_per_hour[0], label='Hour 1')
-plot.plot(altitude, temperatures_per_hour[1], label='Hour 2')
-plot.plot(altitude, temperatures_per_hour[2], label='Hour 3')
-plot.plot(altitude, temperatures_per_hour[3], label='Hour 4')
-plot.plot(altitude, temperatures_per_hour[4], label='Hour 5')
-plot.legend()
+    figure, plot = plt.subplots()
 
+    figure.canvas.set_window_title("Task 3")
 
-plt.show()
+    plot.set_title("Temperatures at different altitude levels. (200, 250)")
+    plot.set_xlabel("Altitude Level [km]")
+    plot.set_ylabel("Temperature [$^\circ$C]")
+    plot.minorticks_on()
+
+    # Plot the lines
+    plot.plot(altitude, temperatures_per_hour[0], label='Hour 1')
+    plot.plot(altitude, temperatures_per_hour[1], label='Hour 2')
+    plot.plot(altitude, temperatures_per_hour[2], label='Hour 3')
+    plot.plot(altitude, temperatures_per_hour[3], label='Hour 4')
+    plot.plot(altitude, temperatures_per_hour[4], label='Hour 5')
+    plot.legend()
+
+    plt.show()
+
+def stacked_line_data():
+    '''
+    Returns stacked line plot temparature data for hours 1 to 5
+    '''
+    # The position in the hurricane from which we want to plot the data
+    LONGITUDE = 200
+    LATITUDE = 250
+
+    # 0.0.35 km to 19.835 km spaced with delta = 0.2 km
+    MIN_HEIGHT = 0.035
+    MAX_HEIGHT = 19.835
+    DELTA = 0.2
+
+    datasets = []
+
+    # Load Temperature data for hours 1 to 5
+    for i in range(1, 6):
+        datasets.append(dc.read_data('TC',i))
+
+    # Temperature data per hour at position (200, 250)
+    temperatures_per_hour = list()
+    for i in range(0, 5):
+        temperatures_per_hour.append(datasets[i][LONGITUDE - 1][LATITUDE - 1])
+
+    # x values should represent the altitude levels
+    altitude = np.arange(MIN_HEIGHT, MAX_HEIGHT + DELTA, DELTA)
+
+    return temperatures_per_hour, altitude

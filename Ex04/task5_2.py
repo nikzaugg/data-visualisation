@@ -16,40 +16,80 @@ import pandas as pd
 from pandas.plotting import scatter_matrix
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
+
+def task5_2_scatterplot_matrix():
+
+    # Load datasets for temperature, pressure and precipitation
+    temp = dc.read_data('TC', 1)
+    pressure = dc.read_data('P', 1)
+    precipitation = dc.read_data('PRECIP', 1)
+
+    # at 1km
+    ALTITUDE = 5
+
+    # define locations
+    locations = [(0,0),(150,150),(300,300),(450,450)]
+
+    locs = list()
+
+    for i in range(0,50, 1):
+        for j in range(0,50, 1):
+            locs.append((i,j))
+
+    # get values at 1km of each dataset
+    temp_altitude = temp[:,:,5]
+    pressure_altitude = pressure[:,:,5]
+    precipitation_altitude = precipitation[:,:,5]
+
+    all_data = list()
+    for location in locations:
+        location_data = list()
+        for dataset in [temp_altitude, pressure_altitude, precipitation_altitude]:
+            location_data.append(dataset[location[0]][location[1]])
+        all_data.append(location_data)
 
 
-temp = dc.read_data('TC', 1)
-pressure = dc.read_data('P', 1)
-precipitation = dc.read_data('PRECIP', 1)
+    # define column names
+    columns=['Temperature [C°]', 'Pressure [Pa]', 'Precipitation']
 
-# FOR 1KM
-ALTITUDE = 5
+    data_frame = pd.DataFrame(all_data, columns=columns)
 
-locations = [(0,0),(150,150),(300,300),(450,450)]
+    # plot as scatter matrix
+    sns.pairplot(data_frame, size=2.5)
 
-locs = list()
+    plt.show()
 
-for i in range(0,50, 1):
-    for j in range(0,50, 1):
-        locs.append((i,j))
+def scatterplot_matrix_data():
+    '''
+    Return data to plot scatter matrix consisting of temperature, pressure and precipitation
+    '''
+    temp = dc.read_data('TC', 1)
+    pressure = dc.read_data('P', 1)
+    precipitation = dc.read_data('PRECIP', 1)
 
-temp_altitude = temp[:,:,5]
-pressure_altitude = pressure[:,:,5]
-precipitation_altitude = precipitation[:,:,5]
+    # FOR 1KM
+    ALTITUDE = 5
 
-all_data = list()
-for location in locations:
-    location_data = list()
-    for dataset in [temp_altitude, pressure_altitude, precipitation_altitude]:
-        location_data.append(dataset[location[0]][location[1]])
-    all_data.append(location_data)
+    locations = [(0,0),(150,150),(300,300),(450,450)]
 
+    locs = list()
 
+    for i in range(0,50, 1):
+        for j in range(0,50, 1):
+            locs.append((i,j))
 
-columns=['Temperature [C°]', 'Pressure [Pa]', 'Precipitation']
+    temp_altitude = temp[:,:,5]
+    pressure_altitude = pressure[:,:,5]
+    precipitation_altitude = precipitation[:,:,5]
 
-data_frame = pd.DataFrame(all_data, columns=columns)
+    all_data = list()
+    for location in locations:
+        location_data = list()
+        for dataset in [temp_altitude, pressure_altitude, precipitation_altitude]:
+            location_data.append(dataset[location[0]][location[1]])
+        all_data.append(location_data)
 
-scatter_matrix(data_frame, figsize=(20, 20), diagonal='hist')
+    columns=['Temperature [C°]', 'Pressure [Pa]', 'Precipitation']
 
-plt.show()
+    return all_data, columns

@@ -21,7 +21,7 @@ def get_terrain_data():
 
 def read_data(datatype, hour):
     '''
-    Load the corresponding variable of the dataset proved at http://vis.computer.org/vis2004contest/data.html
+    Load the corresponding variable of the dataset provied at http://vis.computer.org/vis2004contest/data.html
 
     Arguments:
     - datatype (string)

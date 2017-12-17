@@ -30,7 +30,7 @@ def task4_color_contour_map():
     plot.set_aspect(1)
     plot.invert_yaxis()
     # plot the terrain data on the plot
-    terrain_plot = plot.contour(data, cmap='terrain')
+    terrain_plot = plot.contourf(data, cmap='terrain')
 
     # Set a colorbar
     colorbar = plt.colorbar(terrain_plot)
@@ -49,7 +49,7 @@ def task4_color_contour_map():
     temp_data_altitude = temp_data_hour_1[ : , : , ALTITUDE]
 
     # plot the temperature data on the plot
-    temp_contour = plot.contourf(temp_data_altitude, cmap='jet', alpha=0.8)
+    temp_contour = plot.contourf(temp_data_altitude, cmap='jet', alpha=0.5)
 
     # Set a colorbar for the temperature levels
     colorbar = plt.colorbar(temp_contour)
